@@ -1,0 +1,9 @@
+---
+- name: systemd | daemon-reload
+  systemd:
+    daemon_reload: yes
+
+- name: systemd | restart routinator
+  systemd:
+    name: routinator.service
+    state: restarted

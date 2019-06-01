@@ -1,0 +1,17 @@
+exceptions = []
+expire = 7200
+history-size = 10
+listen-tcp = [{% for listener in routinator_listener_tcp %} "{{ listener }}", {% endfor %}]
+listen-http = [{% for listener in routinator_listener_http %} "{{ listener }}", {% endfor %}]
+log = "default"
+log-level = "WARN"
+refresh = 3600
+repository-dir = "{{ routinator_path }}/repository"
+retry = 600
+rsync-command = "rsync"
+rsync-count = 4
+rsync-timeout = 600
+strict = false
+syslog-facility = "daemon"
+tal-dir = "{{ routinator_path }}/tals"
+validation-threads = 2

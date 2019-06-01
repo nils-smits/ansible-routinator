@@ -1,0 +1,67 @@
+---
+- name: apt | install requirements
+  apt:
+    name: rsync
+    state: latest
+    update_cache: yes
+    install_recommends: no
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: yum | install requirements
+  yum:
+    name: rsync
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red HatEnterprise Linux'
+
+- name: routinator | prepare directory
+  file:
+    path: "{{ routinator_path }}"
+    state: directory
+
+- name: routinator | prepare tals directory
+  file:
+    path: "{{ routinator_path }}/tals"
+    state: directory
+
+- name: routinator | prepare repository directory
+  file:
+    path: "{{ routinator_path }}/repository"
+    state: directory
+
+- name: ARIN | download tal
+  get_url:
+    url: https://www.arin.net/resources/manage/rpki/arin-rfc7730.tal
+    dest: "{{ routinator_path }}/tals/arin.tal"
+
+- name: rust | download
+  get_url:
+    url: https://sh.rustup.rs
+    dest: /tmp/rust_install.sh
+    mode: 755
+
+- name: rust | install
+  shell: "/tmp/rust_install.sh -y"
+
+- name: routinator | install
+  shell: |
+    source ~/.cargo/env
+    /root/.cargo/bin/cargo install routinator --force
+
+- name: routinator | configuration file
+  template:
+    src: routinator.cfg.j2
+    dest: "{{ routinator_path }}/routinator.cfg"
+  notify: systemd | restart routinator
+
+- name: systemd | enroll unit file
+  template:
+    src: routinator.service.j2
+    dest: "/etc/systemd/system/routinator.service"
+  notify: systemd | daemon-reload
+
+- name: systemd | enable and start routinator
+  systemd:
+    name: routinator.service
+    state: started
+    enabled: yes
