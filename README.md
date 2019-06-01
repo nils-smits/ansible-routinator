@@ -1,5 +1,6 @@
 # ansible-routinator
 Ansible role installing [Routinator](https://github.com/NLnetLabs/routinator) and keep track of the daemon via systemd.
+Currently tested on Ubuntu 18.04 only!
 
 ## Variables
 ```
@@ -11,4 +12,3 @@ routinator_listener_http:
   - "127.0.0.1:8080"
   - "[::1]:8080"
 ```
-
