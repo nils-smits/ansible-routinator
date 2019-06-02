@@ -32,7 +32,7 @@
 - name: routinator | enroll tals
   copy:
     src: "{{ item }}"
-    dest: "{{ routinator_path }}/"
+    dest: "{{ routinator_path }}/tals/"
   with_items:
     - afrinic.tal
     - apnic.tal
