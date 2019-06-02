@@ -19,15 +19,20 @@
     path: "{{ routinator_path }}"
     state: directory
 
+- name: routinator | prepare repository directory
+  file:
+    path: "{{ routinator_path }}/repository"
+    state: directory
+
 - name: routinator | prepare tals directory
   file:
     path: "{{ routinator_path }}/tals"
     state: directory
 
-- name: routinator | prepare repository directory
-  file:
-    path: "{{ routinator_path }}/repository"
-    state: directory
+- name: routinator | enroll tals
+  copy:
+    src: [afrinic.tal, apnic.tal, lacnic.tal, ripe.tal]
+    dest: "{{ routinator_path }}/"
 
 - name: ARIN | download tal
   get_url:
