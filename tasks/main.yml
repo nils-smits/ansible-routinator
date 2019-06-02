@@ -1,7 +1,7 @@
 ---
 - name: apt | install requirements
   apt:
-    name: rsync
+    name: [rsync, gcc]
     state: latest
     update_cache: yes
     install_recommends: no
@@ -9,7 +9,7 @@
 
 - name: yum | install requirements
   yum:
-    name: rsync
+    name: [rsync, gcc]
     state: latest
     update_cache: yes
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red HatEnterprise Linux'
