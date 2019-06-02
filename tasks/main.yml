@@ -31,8 +31,13 @@
 
 - name: routinator | enroll tals
   copy:
-    src: [afrinic.tal, apnic.tal, lacnic.tal, ripe.tal]
+    src: "{{ item }}"
     dest: "{{ routinator_path }}/"
+  with_items:
+    - afrinic.tal
+    - apnic.tal
+    - lacnic.tal
+    - ripe.tal
 
 - name: ARIN | download tal
   get_url:
