@@ -6,3 +6,5 @@ routinator_listener_tcp:
 routinator_listener_http:
   - "127.0.0.1:8080"
   - "[::1]:8080"
+routinator_log_level: INFO
+routinator_validation_threads: 2
