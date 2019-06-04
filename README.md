@@ -6,9 +6,9 @@ Currently tested on Ubuntu 18.04 only!
 ```
 routinator_path: /opt/routinator
 routinator_listener_tcp:
-  - "127.0.0.1:8282"
-  - "[::1]:8282"
+  - "127.0.0.1:3323"
+  - "[::1]:3323"
 routinator_listener_http:
-  - "127.0.0.1:8080"
-  - "[::1]:8080"
+  - "127.0.0.1:9556"
+- "[::1]:9556"
 ```
