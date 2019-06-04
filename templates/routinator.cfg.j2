@@ -1,8 +1,8 @@
 exceptions = []
 expire = 7200
 history-size = 10
-listen-tcp = [{% for listener in routinator_listener_tcp %} "{{ listener }}", {% endfor %}]
-listen-http = [{% for listener in routinator_listener_http %} "{{ listener }}", {% endfor %}]
+rtr-listen = [{% for listener in routinator_listener_tcp %} "{{ listener }}", {% endfor %}]
+http-listen = [{% for listener in routinator_listener_http %} "{{ listener }}", {% endfor %}]
 log = "default"
 log-level = "WARN"
 refresh = 3600

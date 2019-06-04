@@ -3,7 +3,7 @@ Description=NLnetLabs Routinator
 After=syslog.target
 
 [Service]
-ExecStart=/root/.cargo/bin/routinator --config {{ routinator_path }}/routinator.cfg rtrd -a
+ExecStart=/root/.cargo/bin/routinator --config {{ routinator_path }}/routinator.cfg server
 Restart=always
 RestartSec=3
 
