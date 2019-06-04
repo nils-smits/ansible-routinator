@@ -5,7 +5,7 @@ Currently tested on Ubuntu 18.04 only!
 ## Variables
 ```
 routinator_path: /opt/routinator
-routinator_listener_tcp:
+routinator_listener_rtr:
   - "127.0.0.1:3323"
   - "[::1]:3323"
 routinator_listener_http:

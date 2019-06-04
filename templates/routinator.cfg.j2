@@ -1,7 +1,7 @@
 exceptions = []
 expire = 7200
 history-size = 10
-rtr-listen = [{% for listener in routinator_listener_tcp %} "{{ listener }}", {% endfor %}]
+rtr-listen = [{% for listener in routinator_listener_rtr %} "{{ listener }}", {% endfor %}]
 http-listen = [{% for listener in routinator_listener_http %} "{{ listener }}", {% endfor %}]
 log = "default"
 log-level = "{{ routinator_log_level }}"
