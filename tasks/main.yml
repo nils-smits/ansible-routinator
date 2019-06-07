@@ -56,7 +56,7 @@
 - name: routinator | install
   shell: |
     source ~/.cargo/env
-    /root/.cargo/bin/cargo install routinator --force
+    /root/.cargo/bin/cargo install routinator
 
 - name: routinator | configuration file
   template:
