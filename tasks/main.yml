@@ -14,64 +14,75 @@
     update_cache: yes
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red HatEnterprise Linux'
 
-- name: routinator | prepare directory
-  file:
-    path: "{{ routinator_path }}"
-    state: directory
+- name: Check if routinator is installed
+  stat:
+    path: '{{ routinator_path }}/routinator.cfg'
+  register: result
+  changed_when: false
 
-- name: routinator | prepare repository directory
-  file:
-    path: "{{ routinator_path }}/repository"
-    state: directory
+- name: install routinator
+  block:
+    - name: routinator | prepare directory
+      file:
+        path: "{{ routinator_path }}"
+        state: directory
 
-- name: routinator | prepare tals directory
-  file:
-    path: "{{ routinator_path }}/tals"
-    state: directory
+    - name: routinator | prepare repository directory
+      file:
+        path: "{{ routinator_path }}/repository"
+        state: directory
 
-- name: routinator | enroll tals
-  copy:
-    src: "{{ item }}"
-    dest: "{{ routinator_path }}/tals/"
-  with_items:
-    - afrinic.tal
-    - apnic.tal
-    - lacnic.tal
-    - ripe.tal
+    - name: routinator | prepare tals directory
+      file:
+        path: "{{ routinator_path }}/tals"
+        state: directory
 
-- name: ARIN | download tal
-  get_url:
-    url: https://www.arin.net/resources/manage/rpki/arin-rfc7730.tal
-    dest: "{{ routinator_path }}/tals/arin.tal"
+    - name: routinator | enroll tals
+      copy:
+        src: "{{ item }}"
+        dest: "{{ routinator_path }}/tals/"
+      with_items:
+        - afrinic.tal
+        - apnic.tal
+        - lacnic.tal
+        - ripe.tal
 
-- name: rust | download
-  get_url:
-    url: https://sh.rustup.rs
-    dest: /tmp/rust_install.sh
-    mode: 755
+    - name: ARIN | download tal
+      get_url:
+        url: https://www.arin.net/resources/manage/rpki/arin-rfc7730.tal
+        dest: "{{ routinator_path }}/tals/arin.tal"
 
-- name: rust | install
-  shell: "/tmp/rust_install.sh -y"
+    - name: rust | download
+      get_url:
+        url: https://sh.rustup.rs
+        dest: /tmp/rust_install.sh
+        mode: 755
 
-- name: routinator | install
-  shell: |
-    source ~/.cargo/env
-    /root/.cargo/bin/cargo install routinator --force
+    - name: rust | install
+      shell: "/tmp/rust_install.sh -y"
 
-- name: routinator | configuration file
-  template:
-    src: routinator.cfg.j2
-    dest: "{{ routinator_path }}/routinator.cfg"
-  notify: systemd | restart routinator
+    - name: routinator | install
+      shell: |
+        source ~/.cargo/env
+        /root/.cargo/bin/cargo install routinator --force
+      args: 
+        creates: '{{ routinator_path }}/routinator.cfg'
 
-- name: systemd | enroll unit file
-  template:
-    src: routinator.service.j2
-    dest: "/etc/systemd/system/routinator.service"
-  notify: systemd | daemon-reload
+    - name: routinator | configuration file
+      template:
+        src: routinator.cfg.j2
+        dest: "{{ routinator_path }}/routinator.cfg"
+      notify: systemd | restart routinator
 
-- name: systemd | enable and start routinator
-  systemd:
-    name: routinator.service
-    state: started
-    enabled: yes
+    - name: systemd | enroll unit file
+      template:
+        src: routinator.service.j2
+        dest: "/etc/systemd/system/routinator.service"
+      notify: systemd | daemon-reload
+
+    - name: systemd | enable and start routinator
+      systemd:
+        name: routinator.service
+        state: started
+        enabled: yes
+  when: result.stat.exists == false
