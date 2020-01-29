@@ -1,10 +1,10 @@
 ---
-routinator_path: /opt/routinator
+routinator_path: /var/lib/routinator
 routinator_listener_rtr:
-  - "127.0.0.1:3323"
+  - "0.0.0.0:3323"
   - "[::1]:3323"
 routinator_listener_http:
-  - "127.0.0.1:9556"
+  - "0.0.0.0:9556"
   - "[::1]:9556"
 routinator_log_level: INFO
 routinator_validation_threads: 2
